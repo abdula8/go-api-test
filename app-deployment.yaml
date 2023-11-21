@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goapp
+  labels:
+    app: goapp
+    env: demo
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: goapp
+  template:
+    metadata:
+      labels:
+        app: goapp
+    spec:
+      containers:
+      - name: goapp
+        image: local-app:latest
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: MYSQL_HOST
+            value: mysql
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: username
+          - name: MYSQL_PASS
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: password
+        ports:
+        - containerPort: 9090
+        livenessProbe:
+          httpGet:
+            path: /ok
+            port: 9090
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+             path: /ok
+             port: 9090
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1

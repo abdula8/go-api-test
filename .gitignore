@@ -1,0 +1,11 @@
+deployments
+mysql_data
+.dockerignore
+docker-compose.yml
+Dockerfile
+entrypoint.sh
+mysql-statefulset.yaml
+mysql-service.yaml
+
+
+
