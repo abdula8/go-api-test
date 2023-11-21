@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: go
+      MYSQL_PASS: golang
+      MYSQL_PORT: 3306
+    ports:
+      - "9090:9090"
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: golang
+      MYSQL_DATABASE: gofo
+      # MYSQL_DATABASE: internship
+      MYSQL_USER: go
+      MYSQL_PASSWORD: golang
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+# MYSQL_HOST
+# * MYSQL_USER
+# * MYSQL_PASS
+# * MYSQL_PORT
+  
+
+# volumes:
+#   mysql_data:
+#docker run --network app_default -e MYSQL_HOST=0.0.0.0 -e MYSQL_USER=go -e MYSQL_PASS=golang -e MYSQL_PORT=3306 -p 9090:9090 --name your_app_container_name --link app-mysql-1:mysql app-app
